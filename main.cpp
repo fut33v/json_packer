@@ -41,8 +41,9 @@ void SetupSignalHandler()
 }
 
 
-// TODO: get test file with python
+// TODO: get test file with python or generate with this json lib
 // TODO: create docker file for debian system
+// TODO: tests: google tests or smth
 
 int main(int argc, char* argv[])
 {
@@ -70,7 +71,7 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    std::unordered_map<std::string, int32_t> keysMap;
+    std::unordered_map<std::string, int32_t> keysDictionary;
     std::string line;
     while (std::getline(inputFile, line) && !g_interrupted) {
         std::cout << line << std::endl; // TODO: remove
@@ -81,13 +82,13 @@ int main(int argc, char* argv[])
                 continue;
             }
             for (json::iterator it = data.begin(); it != data.end(); ++it) {
-                if (!keysMap.contains(it.key())) {
-                    keysMap[it.key()] = keysMap.size();
+
+                if (!keysDictionary.contains(it.key())) {
+                    keysDictionary[it.key()] = keysDictionary.size();
                 }
-                int32_t intKey = keysMap[it.key()];
+                int32_t intKey = keysDictionary[it.key()];
 
-                // std::cout << it.key() << " : " << it.value() << "\n";
-
+                // TODO: how to prettify this?
                 if (it.value().is_number_integer()) {
                     writer->WriteRecordElement(intKey, it.value().get<int>());
                 }
@@ -100,6 +101,7 @@ int main(int argc, char* argv[])
                 if (it.value().is_string()) {
                     writer->WriteRecordElement(intKey, it.value().get<std::string>());
                 }
+
             }
         } catch (json::exception &e) {
             std::cout << "failed to parse json line '" << line << "'" << std::endl;
@@ -107,9 +109,11 @@ int main(int argc, char* argv[])
         }
     }
 
-    for (auto it = keysMap.begin(); it != keysMap.end(); ++it) {
-        std::cout << (*it).first << " " << (*it).second << std::endl;
-    }
+    writer->WriteDictionary(keysDictionary);
+
+    // for (auto it = keysMap.begin(); it != keysMap.end(); ++it) {
+    //     std::cout << (*it).first << " " << (*it).second << std::endl;
+    // }
 
 
 }

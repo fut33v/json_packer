@@ -13,21 +13,6 @@ BinaryWriter::~BinaryWriter()
 
 }
 
-void BinaryWriter::WriteDictionary(std::unordered_map<std::string, int32_t> &dictionary)
-{
-    for (auto it = dictionary.begin(); it != dictionary.end(); ++it) {
-        std::string keyString = (*it).first;
-        int keyInteger = (*it).second; // TODO: what to do with all this ints
-
-        WriteValue(keyInteger);
-
-        uint16_t networkLength = htons(GetLength(keyString));
-        WriteIntegral(networkLength);
-
-        WriteValue(keyString);
-    }
-}
-
 template <> uint8_t BinaryWriter::GetTypeByte<bool>()
 {
     return (uint8_t)TypesEnum::Boolean;
@@ -79,3 +64,19 @@ template <> void BinaryWriter::WriteValue<float>(const float &value)
     int32_t networkInt = htonl(u.integerValue);
     WriteIntegral(networkInt);
 }
+
+void BinaryWriter::WriteDictionary(std::unordered_map<std::string, int32_t> &dictionary)
+{
+    for (auto it = dictionary.begin(); it != dictionary.end(); ++it) {
+        std::string keyString = (*it).first;
+        int keyInteger = (*it).second; // TODO: what to do with all this ints
+
+        WriteValue(keyInteger);
+
+        uint16_t networkLength = htons(GetLength(keyString));
+        WriteIntegral(networkLength);
+
+        WriteValue(keyString);
+    }
+}
+
