@@ -1,0 +1,4 @@
+{"key1":"value", "key2":42, "key3":true }
+{"key4:"asdfh", "key5":true, "key6": 69 }
+{"key4":"asdfh", "key5":true, "key6": true }
+{"abcd": 2.58, "efg": "abстрингba", "asdf123": true }
