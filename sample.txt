@@ -1,4 +1,15 @@
 {"key1":"value", "key2":42, "key3":true }
+42
 {"key4:"asdfh", "key5":true, "key6": 69 }
+[12, 13]
 {"key4":"asdfh", "key5":true, "key6": true }
+"string"
+{"abcd": 2.58, "efg": "abстрингba", "asdf123": true }
+{"abcd": 2.58, "efg": "abстрингba", "asdf123": true }
+{"abcd": 2.58, "efg": "abстрингba", "asdf123": true }
+{"abcd": 2.58, "efg": "abстрингba", "asdf123": true }
+{"abcd": 2.58, "efg": "abстрингba", "asdf123": true }
+{"abcd": 2.58, "efg": "abстрингba", "asdf123": true }
+{"abcd": 2.58, "efg": "abстрингba", "asdf123": true }
+{"abcd": 2.58, "efg": "abстрингba", "asdf123": true }
 {"abcd": 2.58, "efg": "abстрингba", "asdf123": true }

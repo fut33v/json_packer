@@ -5,7 +5,7 @@
 
 BinaryWriter::BinaryWriter(const std::string &fileName)
 {
-    m_ofstream = std::ofstream(fileName, std::ios::out | std::ios::binary /*| std::ios::app*/);
+    m_ofstream = std::ofstream(fileName, std::ios::out | std::ios::binary);
 }
 
 BinaryWriter::~BinaryWriter()
@@ -33,7 +33,7 @@ template <> uint8_t BinaryWriter::GetTypeByte<float>()
     return (uint8_t)TypesEnum::Float;
 }
 
-template <> uint32_t BinaryWriter::GetLength<std::string>(const std::string& value)
+template <> size_t BinaryWriter::GetLength<std::string>(const std::string& value)
 {
     return value.size();
 }
@@ -65,11 +65,20 @@ template <> void BinaryWriter::WriteValue<float>(const float &value)
     WriteIntegral(networkInt);
 }
 
-void BinaryWriter::WriteDictionary(std::unordered_map<std::string, int32_t> &dictionary)
+void BinaryWriter::WriteNullElement(int key)
+{
+    uint32_t networkKeyInt = htonl(key);
+    WriteIntegral(networkKeyInt);
+
+    uint8_t typeByte = (uint8_t)TypesEnum::Null;
+    WriteIntegral(typeByte);
+}
+
+void BinaryWriter::WriteDictionary(std::unordered_map<std::string, int> &dictionary)
 {
     for (auto it = dictionary.begin(); it != dictionary.end(); ++it) {
         std::string keyString = (*it).first;
-        int keyInteger = (*it).second; // TODO: what to do with all this ints
+        int keyInteger = (*it).second;
 
         WriteValue(keyInteger);
 

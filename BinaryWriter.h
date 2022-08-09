@@ -1,6 +1,9 @@
 // json_packer assignment
 // Author: Ilya Fateev
 
+#ifndef __BINARY_WRITER_H__
+#define __BINARY_WRITER_H__
+
 #include <fstream>
 #include <string>
 
@@ -15,9 +18,11 @@ enum class TypesEnum : uint8_t
     Boolean,
     Integer,
     String,
-    Float
+    Float,
+    Null
 };
 
+// Writes input record elements and dictionary in TLV format as below:
 // record:
 // key (4 bytes) | type (1 byte) | length (2 bytes) | value (length bytes)
 // dictionary:
@@ -33,7 +38,7 @@ class BinaryWriter final
         BinaryWriter& operator=(BinaryWriter&) = delete;
 
         template <typename T>
-        void WriteRecordElement(int32_t key, T value)
+        void WriteRecordElement(int key, T value)
         {
             uint32_t networkKeyInt = htonl(key);
             WriteIntegral(networkKeyInt);
@@ -47,7 +52,9 @@ class BinaryWriter final
             WriteValue(value);
         }
 
-        void WriteDictionary(std::unordered_map<std::string, int32_t> &dictionary);
+        void WriteNullElement(int key);
+
+        void WriteDictionary(std::unordered_map<std::string, int> &dictionary);
 
     private:
 
@@ -55,7 +62,7 @@ class BinaryWriter final
         uint8_t GetTypeByte();
 
         template<typename T>
-        uint32_t GetLength(T const &value)
+        size_t GetLength(T const &value)
         {
             return sizeof(T);
         }
@@ -72,3 +79,5 @@ class BinaryWriter final
         std::ofstream m_ofstream;
 
 };
+
+#endif
