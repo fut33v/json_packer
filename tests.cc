@@ -105,5 +105,16 @@ TEST(BinaryWriterTest, WriteReadRecord) {
     intValue = ntohl(intValue);
     EXPECT_EQ(IntToFloat(intValue), 69.420f);
 
+    key = Read<int>(binaryFile);
+    key = ntohl(key);
+    EXPECT_EQ(key, 7);
+
+    type = Read<uint8_t>(binaryFile);
+    EXPECT_EQ(type, (uint8_t)TypesEnum::Null);
+
+    char tempChar;
+    binaryFile.get(tempChar);
+    EXPECT_EQ(binaryFile.eof(), true);
+
     std::filesystem::remove(fname);
 }
