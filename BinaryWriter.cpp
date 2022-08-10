@@ -74,7 +74,7 @@ void BinaryWriter::WriteNullElement(int key)
     WriteIntegral(typeByte);
 }
 
-void BinaryWriter::WriteDictionary(std::unordered_map<std::string, int> &dictionary)
+void BinaryWriter::WriteDictionary(Dictionary &dictionary)
 {
     for (auto it = dictionary.begin(); it != dictionary.end(); ++it) {
         std::string keyString = (*it).first;

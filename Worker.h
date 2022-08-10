@@ -6,16 +6,6 @@
 
 #include <atomic>
 
-// TODO: remove or make template
-// void Print(std::unordered_map<std::string, uint32_t> map)
-// {
-//     for (auto it = map.begin(); it != map.end(); ++it) {
-//         std::cout << (*it).first << " " << (*it).second << std::endl;
-//     }
-// }
-// template <typename T>
-// void Print();
-
 class Worker final
 {
     public:

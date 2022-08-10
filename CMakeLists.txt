@@ -25,12 +25,14 @@ enable_testing()
 add_executable(
   tests
   BinaryWriter.cpp
+  Worker.cpp
   tests.cc
 )
 target_link_libraries(
   tests
   GTest::gtest_main
 )
+target_include_directories(tests PRIVATE "nlohmann_json/single_include")
 
 include(GoogleTest)
 gtest_discover_tests(tests)

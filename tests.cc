@@ -5,15 +5,18 @@
 #include <filesystem>
 #include <gtest/gtest.h>
 #include "BinaryWriter.h"
+#include "Worker.h"
 
 template <typename T>
-T Read(std::ifstream &ifstream) {
+T Read(std::ifstream &ifstream)
+{
     T value;
     ifstream.read(reinterpret_cast<char*>(&value), sizeof(value));
     return value;
 }
 
-float IntToFloat(int value) {
+float IntToFloat(int value)
+{
     union {
         int intValue;
         float floatValue;
@@ -22,8 +25,8 @@ float IntToFloat(int value) {
     return u.floatValue;
 }
 
-TEST(BinaryWriterTest, WriteReadRecord) {
-
+TEST(BinaryWriterTest, WriteReadRecords)
+{
     std::string fname = "test.bin";
 
     auto writer = std::make_unique<BinaryWriter>(fname);
@@ -118,3 +121,60 @@ TEST(BinaryWriterTest, WriteReadRecord) {
 
     std::filesystem::remove(fname);
 }
+
+TEST(BinaryWriterTest, WriteReadDictionary)
+{
+    std::string fname = "test.bin";
+
+    auto writer = std::make_unique<BinaryWriter>(fname);
+    Dictionary dictionary = {{"key4", 1}, {"key1", 0}, {"key2", 2}};
+    writer->WriteDictionary(dictionary);
+    writer.reset();
+
+    std::ifstream binaryFile(fname, std::ios::binary);
+
+    while (!binaryFile.eof()) {
+        int key;
+        uint16_t length;
+
+        key = Read<int>(binaryFile);
+        key = ntohl(key);
+
+        if (binaryFile.eof()) {
+            break;
+        }
+
+        length = Read<uint16_t>(binaryFile);
+        length = ntohs(length);
+
+        std::string stringKey(length, ' ');
+        binaryFile.read(&stringKey[0], length);
+
+        EXPECT_TRUE(dictionary.contains(stringKey));
+
+        EXPECT_EQ(dictionary[stringKey], key);
+    }
+
+    std::filesystem::remove(fname);
+}
+
+TEST(WorkerTest, RunSample)
+{
+    char fnameBin[] = "tests";
+    char fnameIn[]= "../sample.txt";
+    char fnameOut[] = "test.bin";
+    char *argv[3] = {fnameBin, fnameIn, fnameOut};
+
+    int ret = Worker::Main(3, argv);
+
+    EXPECT_EQ(ret, EXIT_SUCCESS);
+
+    // iter through sample json
+    // try to find what we want in binary
+
+    std::filesystem::remove(fnameOut);
+}
+
+// gen big file with json strings
+// run worker
+// we can check output bin file

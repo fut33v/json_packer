@@ -22,6 +22,8 @@ enum class TypesEnum : uint8_t
     Null
 };
 
+using Dictionary = std::unordered_map<std::string, int>;
+
 // Writes input record elements and dictionary in TLV format as below:
 // record:
 // key (4 bytes) | type (1 byte) | length (2 bytes) | value (length bytes)
@@ -54,7 +56,7 @@ class BinaryWriter final
 
         void WriteNullElement(int key);
 
-        void WriteDictionary(std::unordered_map<std::string, int> &dictionary);
+        void WriteDictionary(Dictionary &dictionary);
 
     private:
 
