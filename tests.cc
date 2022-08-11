@@ -169,12 +169,5 @@ TEST(WorkerTest, RunSample)
 
     EXPECT_EQ(ret, EXIT_SUCCESS);
 
-    // iter through sample json
-    // try to find what we want in binary
-
     std::filesystem::remove(fnameOut);
 }
-
-// gen big file with json strings
-// run worker
-// we can check output bin file

@@ -10,9 +10,6 @@
 #include <unordered_map>
 #include <arpa/inet.h>
 
-template<class T>
-concept Integral = std::is_integral<T>::value;
-
 enum class TypesEnum : uint8_t
 {
     Boolean,
@@ -69,7 +66,7 @@ class BinaryWriter final
             return sizeof(T);
         }
 
-        template<Integral T>
+        template<std::integral T>
         void WriteIntegral(T value)
         {
             m_ofstream.write(reinterpret_cast<char*>(&value), sizeof(value));
